@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <services>
+        <service id="content.content_manager"
+            class="WebDev\ContentBundle\Content\ContentManager">
+            <tag name="kernel.event_listener" event="kernel.request"
+                 method="onRequestLoadContext" priority="-200" />
+            <argument type="service" id="content.page_repository" />
+            <argument type="service" id="content.block_repository" />
+            <argument type="service" id="twig" />
+            <argument type="service" id="templating" />
+            <argument type="service" id="router" />
+            <argument type="service" id="logger" />
+        </service>
+    </services>
+</container>

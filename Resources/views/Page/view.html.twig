@@ -1,0 +1,14 @@
+
+{% if content.page is not empty %}
+    <h2>{{ content.page.title }}</h2>
+
+    {% for block in content.page.blocks %}
+        <section id="page{{ content.page.id }}-block{{ block.id }}-{{ block.placeholder }}">
+            {{ block|raw }}
+        </section>
+    {% else %}
+        No Page Content
+    {% endfor %}
+{% else %}
+    <h2>Page does not exist matching route {{ app.request.attributes.get('_route') }}</h2>
+{% endif %}
