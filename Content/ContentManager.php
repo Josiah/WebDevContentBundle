@@ -2,34 +2,32 @@
 
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bundle\FrameworkBundle\Routing\Router;
+use Symfony\Bundle\TwigBundle\TwigEngine;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\Log\LoggerInterface;
 use Twig_Environment;
-use Symfony\Bundle\TwigBundle\TwigEngine;
+use WebDev\ContentBundle\Entity\Page;
 
 class ContentManager
 {
     public function __construct(
         EntityRepository $pageRepository,
         EntityRepository $blockRepository,
-        Twig_Environment $twig,
-        TwigEngine $templating,
         Router $router,
         LoggerInterface $logger)
     {
         $this->pageRepository = $pageRepository;
         $this->blockRepository = $blockRepository;
-        $this->templating = $templating;
-        $this->twig = $twig;
         $this->router = $router;
         $this->log = $logger;
     }
 
     protected $pageRepository;
     protected $blockRepository;
-    protected $twig;
-    protected $templating;
     protected $router;
     protected $log;
 
@@ -37,6 +35,7 @@ class ContentManager
      * @var WebDev\ContentBundle\Content\ContentContext
      */
     protected $context;
+    public function getContext() { return $this->context; }
 
     /**
      * Injects the relevant content for the context into each request
@@ -67,11 +66,13 @@ class ContentManager
             else
             {
                 $this->log->info("No content page found matching route `$route`");
+                $page = new Page();
+                $page->setRoute($route);
+                $this->context->setPage($page);
             }
         }
 
         // Store the context in the request and template engine
         $event->getRequest()->attributes->set('content',$this->context);
-        $this->twig->addGlobal('content',$this->context);
     }
 }

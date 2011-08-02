@@ -1,0 +1,26 @@
+<form id="webdev-content-admin-block" method="post"
+    action="{{ path('webdev_content_admin_block', {
+        'route': page.route,
+        'placeholder': block.placeholder}) }}">
+    {{ form_widget(form) }}
+    <input type="submit" value="Save" />
+</form>
+{% if app.request.isXmlHttpRequest %}
+<script>
+(function($){
+    $('#webdev-content-admin-block').submit(function(event){
+        $.ajax({{ path('webdev_content_admin_block', {
+            'route': page.route,
+            'placeholder': block.placeholder,
+            '_format': 'json'
+        })|json_encode|raw }},{
+            type: "POST",
+            data: $(this).serialize(),
+            dataType: 'json'
+        });
+
+        event.preventDefault();
+    });
+})(jQuery);
+</script>
+{% endif %}

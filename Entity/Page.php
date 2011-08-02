@@ -1,5 +1,7 @@
 <?php namespace WebDev\ContentBundle\Entity;
 
+use Exception;
+
 // Annotations
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
@@ -19,7 +21,7 @@ use Doctrine\ORM\Mapping\Table;
  */
 class Page
 {
-    public function __toString(){ return $this->getTitle(); }
+    public function __toString(){ return (string) $this->getTitle(); }
 
     /**
      * @Id @GeneratedValue
@@ -33,7 +35,7 @@ class Page
     protected $route;
 
     /**
-     * @Column
+     * @Column(nullable=true)
      */
     protected $title;
 
@@ -41,6 +43,31 @@ class Page
      * @OneToMany(targetEntity="Block", mappedBy="page", indexBy="placeholder")
      */
     protected $blocks;
+
+    /**
+     * Add block
+     *
+     * @param WebDev\ContentBundle\Entity\Block $block
+     */
+    public function addBlock(Block $block)
+    {
+        if(!$block->getPlaceholder())
+        {
+            throw new Exception("Cannot add content block without a placeholder.");
+        }
+
+        $this->blocks[$block->getPlaceholder()] = $block;
+    }
+
+    public function addBlocks(array $blocks)
+    {
+        foreach($blocks as $block)
+        {
+            $this->addBlock($block);
+        }
+    }
+
+
     public function __construct()
     {
         $this->blocks = new \Doctrine\Common\Collections\ArrayCollection();
@@ -94,16 +121,6 @@ class Page
     public function getTitle()
     {
         return $this->title;
-    }
-
-    /**
-     * Add blocks
-     *
-     * @param WebDev\ContentBundle\Entity\Block $blocks
-     */
-    public function addBlocks(\WebDev\ContentBundle\Entity\Block $blocks)
-    {
-        $this->blocks[] = $blocks;
     }
 
     /**

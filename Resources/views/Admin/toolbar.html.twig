@@ -1,0 +1,30 @@
+{% javascripts '@ContentBundle/Resources/js/jquery-1.6.2.min.js' -%}
+    <script>window.jQuery || document.write('<script src="{{ asset_url }}"><\/script>')</script>
+{%- endjavascripts %}
+<div id="content-toolbar" style="position: absolute; top: 0; left: 0; display: block;">
+    {% if context.globalSections is defined %}
+        <ul class="global">
+            {% for section in context.globalSections %}
+                <li>
+                    <a href="#">{{ section.placeholder|trans }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    <ul class="page">
+        {% for section in context.page.blocks -%}
+            <li>
+                <a href="{{ path('webdev_content_admin_block',{
+                    'route': context.page.route,
+                    'placeholder': section.placeholder}) }}">
+                    {{ section.placeholder|trans }}
+                </a>
+            </li>
+        {% endfor -%}
+    </ul>
+</div>
+{% javascripts
+    '@ContentBundle/Resources/js/jquery.leanModal.min.js'
+    '@ContentBundle/Resources/js/toolbar.js' -%}
+    <script src="{{ asset_url }}"></script>
+{%- endjavascripts %}

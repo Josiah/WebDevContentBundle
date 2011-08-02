@@ -10,10 +10,20 @@
                  method="onRequestLoadContext" priority="-200" />
             <argument type="service" id="content.page_repository" />
             <argument type="service" id="content.block_repository" />
-            <argument type="service" id="twig" />
-            <argument type="service" id="templating" />
             <argument type="service" id="router" />
             <argument type="service" id="logger" />
         </service>
+        <service id="content.twig.extension"
+            class="WebDev\ContentBundle\Twig\Extension\WebDevContentTwigExtension">
+            <tag name="twig.extension" />
+            <argument type="service" id="content.content_manager" />
+        </service>
+        <!--service id="content.content_toolbar"
+            class="WebDev\ContentBundle\Content\ContentToolbar">
+            <tag name="kernel.event_listener" event="kernel.response"
+                 method="onResponseInjectToolbar" priority="-200" />
+            <argument type="service" id="content.content_manager" />
+            <argument type="service" id="templating" />
+        </service-->
     </services>
 </container>

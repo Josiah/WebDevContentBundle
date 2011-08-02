@@ -30,7 +30,7 @@ class Block
     /**
      * Ties this block to a particular page
      *
-     * @ManyToOne(targetEntity="Page",inversedBy="blocks")
+     * @ManyToOne(targetEntity="Page",inversedBy="blocks", cascade={"all"})
      */
     protected $page;
 

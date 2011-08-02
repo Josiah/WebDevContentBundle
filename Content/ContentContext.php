@@ -42,6 +42,11 @@ class ContentContext
         foreach($blocks as $block) $this->addBlock($block);
     }
 
+    public function getGlobalSections()
+    {
+        return $this->blocks;
+    }
+
     /**
      * @var WebDev\ContentBundle\Entity\Page
      */
@@ -52,21 +57,31 @@ class ContentContext
     public function getPage() { return $this->page; }
 
     /**
-     * Determines whether the specified placeholder exists within this content context
+     * Indicates whether this context contains the specified section
      *
-     * @param string $placeholder
-     * @return bool TRUE if the placeholder exists; FALSE otherwise
+     * @return bool TRUE if this context contains the section; FALSE otherwise
      */
-    public function offsetExists($placeholder)
+    public function has($section)
     {
-        if(!is_null($this->getPage()) && $this->getPage()->getBlocks()->containsKey($placeholder))
+        if(!is_null($this->getPage()) && $this->getPage()->getBlocks()->containsKey($section))
         {
             return true;
         }
         else
         {
-            return isset($this->blocks[$placeholder]);
+            return isset($this->blocks[$section]);
         }
+    }
+
+    /**
+     * Determines whether the specified section exists within this content context
+     *
+     * @param string $section
+     * @return bool TRUE if the section exists; FALSE otherwise
+     */
+    public function offsetExists($section)
+    {
+        return $this->has($section);
     }
 
     /**
