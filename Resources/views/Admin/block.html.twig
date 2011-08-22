@@ -9,6 +9,7 @@
 <script>
 (function($){
     $('#webdev-content-admin-block').submit(function(event){
+        for(i in CKEDITOR.instances) CKEDITOR.instances[i].updateElement();
         $.ajax({{ path('webdev_content_admin_block', {
             'route': page.route,
             'placeholder': block.placeholder,
@@ -16,7 +17,10 @@
         })|json_encode|raw }},{
             type: "POST",
             data: $(this).serialize(),
-            dataType: 'json'
+            dataType: 'json',
+            success: function(){
+                window.location.reload();
+            }
         });
 
         event.preventDefault();

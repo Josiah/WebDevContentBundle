@@ -13,6 +13,11 @@
             <argument type="service" id="router" />
             <argument type="service" id="logger" />
         </service>
+        <service id="content.navigation_manager"
+            class="WebDev\ContentBundle\Model\NavigationManager">
+            <argument type="service" id="router" />
+            <argument type="service" id="security.context" />
+        </service>
         <service id="content.twig.extension"
             class="WebDev\ContentBundle\Twig\Extension\WebDevContentTwigExtension">
             <tag name="twig.extension" />

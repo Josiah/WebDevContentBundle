@@ -17,6 +17,7 @@ class PageController
     extends Controller
 {
     /**
+     * @Route
      * @Template
      */
     public function viewAction( ContentContext $content )

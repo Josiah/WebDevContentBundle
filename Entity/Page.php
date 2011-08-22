@@ -1,5 +1,6 @@
 <?php namespace WebDev\ContentBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Exception;
 
 // Annotations
@@ -21,6 +22,11 @@ use Doctrine\ORM\Mapping\Table;
  */
 class Page
 {
+    public function __construct()
+    {
+        $this->blocks = new ArrayCollection;
+    }
+
     public function __toString(){ return (string) $this->getTitle(); }
 
     /**
@@ -40,9 +46,26 @@ class Page
     protected $title;
 
     /**
+     * @Column(nullable=true)
+     */
+    protected $label;
+
+    /**
      * @OneToMany(targetEntity="Block", mappedBy="page", indexBy="placeholder")
      */
     protected $blocks;
+
+    /**
+     * @ManyToOne(targetEntity="Page", inversedBy="children")
+     * @var WebDev\ContentBundle\Entity\Page
+     */
+    protected $parent;
+
+    /**
+     * @OneToMany(targetEntity="Page", mappedBy="parent")
+     * @var WebDev\ContentBundle\Entity\Page[]
+     */
+    protected $chidren;
 
     /**
      * Add block
@@ -65,12 +88,6 @@ class Page
         {
             $this->addBlock($block);
         }
-    }
-
-
-    public function __construct()
-    {
-        $this->blocks = new \Doctrine\Common\Collections\ArrayCollection();
     }
     
     /**

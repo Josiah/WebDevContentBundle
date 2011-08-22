@@ -48,7 +48,7 @@ class AdminController
         }
 
         $fb = $this->createFormBuilder($block)
-            ->add('content','html');
+            ->add('content','html',array('toolbar' => 'Full'));
         $form = $fb->getForm($fb);
 
         // Process the form

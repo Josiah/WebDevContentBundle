@@ -17,6 +17,9 @@ class ContentContext
         $this->blocks = new ArrayCollection();
     }
 
+    /** @return string */
+    public function __toString() { return spl_object_hash($this); }
+
     /**
      * @var WebDev\ContentBundle\Entity\Block[]
      */
@@ -42,6 +45,11 @@ class ContentContext
         foreach($blocks as $block) $this->addBlock($block);
     }
 
+    /**
+     * Gets the content sections that are available globally
+     *
+     * @return WebDev\ContentBundle\Entity\Block[]
+     */
     public function getGlobalSections()
     {
         return $this->blocks;
@@ -55,6 +63,27 @@ class ContentContext
     public function setPage(Page $page) { $this->page = $page; }
     /** @return WebDev\ContentBundle\Entity\Page */
     public function getPage() { return $this->page; }
+
+    /**
+     * Indicates that block has been rendered in this context
+     *
+     * @param WebDev\ContentBundle\Entity\Block
+     */
+    public function markRendered(Block $block)
+    {
+        if(!in_array($block,$this->rendered,true))
+        {
+            $this->rendered[] = $block;
+        }
+    }
+
+    /**
+     * Contains a list of the blocks that have been rendered in this context
+     *
+     * @var WebDev\ContentBundle\Entity\Block[]
+     */
+    protected $rendered = array();
+    public function getRendered(){ return $this->rendered; }
 
     /**
      * Indicates whether this context contains the specified section

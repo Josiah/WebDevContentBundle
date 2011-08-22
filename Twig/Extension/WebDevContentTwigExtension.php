@@ -16,17 +16,6 @@ class WebDevContentTwigExtension
     protected $contentManager;
 
     /**
-     * Marks the block as rendered for use when editing this context
-     *
-     * @param string $block
-     */
-    public function markRendered($block)
-    {
-
-        $this->contentManager->getContext()->markRendered($block);
-    }
-
-    /**
      * Determines wether the current content context has the specified block
      *
      * @param string $block
@@ -38,21 +27,23 @@ class WebDevContentTwigExtension
         return isset($context[$block]);
     }
 
-    public function render($block)
+    public function render($placeholder)
     {
         $context = $this->contentManager->getContext();
+        $block = $context[$placeholder];
+        $context->markRendered($block);
 
-        return $context[$block];
+        return $block;
     }
 
-    public function add($name, $content)
+    public function add($placeholder, $content)
     {
         $context = $this->contentManager->getContext();
         $page = $context->getPage();
 
         $block = new Block();
         $block->setPage($page);
-        $block->setPlaceholder($name);
+        $block->setPlaceholder($placeholder);
         $block->setContent($content);
         $page->addBlock($block);
     }
