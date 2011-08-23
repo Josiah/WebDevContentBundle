@@ -1,0 +1,28 @@
+<form id="webdev-content-admin-page" method="post"
+    action="{{ path('webdev_content_admin_page', {
+        'route': page.route
+    }) }}">
+    {{ form_widget(form) }}
+    <input type="submit" value="Save" />
+</form>
+{% if app.request.isXmlHttpRequest %}
+<script>
+(function($){
+    $('#webdev-content-admin-page').submit(function(event){
+        $.ajax({{ path('webdev_content_admin_page', {
+            'route': page.route,
+            '_format': 'json'
+        })|json_encode|raw }},{
+            type: "POST",
+            data: $(this).serialize(),
+            dataType: 'json',
+            success: function(){
+                window.location.reload();
+            }
+        });
+
+        event.preventDefault();
+    });
+})(jQuery);
+</script>
+{% endif %}

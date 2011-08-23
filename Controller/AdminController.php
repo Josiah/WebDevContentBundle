@@ -18,6 +18,39 @@ class AdminController
     extends Controller
 {
     /**
+     * @Route("/admin/content/{route}")
+     * @Template
+     */
+    public function pageAction(Page $page=null)
+    {
+        $request = $this->get('request');
+        $em = $this->get('doctrine.orm.entity_manager');
+
+        if(is_null($page))
+        {
+            $page = new Page();
+            $page->setRoute($request->attributes->get('route'));
+        }
+
+        $fb = $this->createFormBuilder($page)
+            ->add('title');
+        $form = $fb->getForm();
+
+        // Process the form
+        if($request->getMethod() == "POST")
+        {
+            $form->bindRequest($request);
+            if($form->isValid())
+            {
+                $em->persist($page);
+                $em->flush();
+            }
+        }
+
+        return array('form' => $form->createView(), 'page' => $page);
+    }
+
+    /**
      * @Route("/admin/content/{route}/{placeholder}")
      * @Template
      */
@@ -49,7 +82,7 @@ class AdminController
 
         $fb = $this->createFormBuilder($block)
             ->add('content','html',array('toolbar' => 'Full'));
-        $form = $fb->getForm($fb);
+        $form = $fb->getForm();
 
         // Process the form
         if($request->getMethod() == "POST")
