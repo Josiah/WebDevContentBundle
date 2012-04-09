@@ -11,6 +11,7 @@
             <argument type="service" id="content.page_repository" />
             <argument type="service" id="content.block_repository" />
             <argument type="service" id="router" />
+            <argument type="service" id="security.context" />
             <argument type="service" id="logger" />
         </service>
         <service id="content.navigation_manager"

@@ -32,8 +32,13 @@ class WebDevContentTwigExtension
         $context = $this->contentManager->getContext();
         $block = $context[$placeholder];
         $context->markRendered($block);
-
-        return $block;
+        
+        if ($this->contentManager->isEditAccessGranted()) {
+            $uri = $this->contentManager->getBlockAdminUri($block,'json');
+            return "<div id=\"webdev_content_{$placeholder}\" data-content-block=\"{$placeholder}\" data-content-uri=\"{$uri}\">{$block}</div>";
+        } else {
+            return $block;
+        }
     }
 
     public function add($placeholder, $content)

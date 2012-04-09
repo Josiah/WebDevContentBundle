@@ -1,3 +1,5 @@
+<html>
+<body>
 <form id="webdev-content-admin-block" method="post"
     action="{{ path('webdev_content_admin_block', {
         'route': page.route,
@@ -6,9 +8,9 @@
     <input type="submit" value="Save" />
 </form>
 {% if app.request.isXmlHttpRequest %}
-<script>
+<script type="text/javascript">
 (function($){
-    $('#webdev-content-admin-block').submit(function(event){
+    $(document).on('submit', '#webdev-content-admin-block', function(event){
         for(i in CKEDITOR.instances) CKEDITOR.instances[i].updateElement();
         $.ajax({{ path('webdev_content_admin_block', {
             'route': page.route,
@@ -28,3 +30,5 @@
 })(jQuery);
 </script>
 {% endif %}
+</body>
+</html>

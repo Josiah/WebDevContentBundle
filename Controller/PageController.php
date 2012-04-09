@@ -20,7 +20,7 @@ class PageController
      * @Route
      * @Template
      */
-    public function viewAction( ContentContext $content )
+    public function viewAction(ContentContext $content)
     {
         return array('content');
     }

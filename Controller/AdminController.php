@@ -80,21 +80,16 @@ class AdminController
             $block->setPlaceholder($placeholder);
         }
 
-        $fb = $this->createFormBuilder($block)
-            ->add('content','html',array('toolbar' => 'Full'));
-        $form = $fb->getForm();
-
         // Process the form
         if($request->getMethod() == "POST")
         {
-            $form->bindRequest($request);
-            if($form->isValid())
-            {
+            if($request->request->get('content')) {
+                $block->setContent($request->request->get('content'));
                 $em->persist($block);
                 $em->flush();
             }
         }
 
-        return array('form'=>$form->createView(),'page'=>$page,'block'=>$block);
+        return array('page'=>$page,'block'=>$block);
     }
 }
